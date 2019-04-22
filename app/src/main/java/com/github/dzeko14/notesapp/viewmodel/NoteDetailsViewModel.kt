@@ -2,6 +2,7 @@ package com.github.dzeko14.notesapp.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.content.Intent
 import com.github.dzeko14.notesapp.database.AppDatabase
 import com.github.dzeko14.notesapp.model.Note
 import com.github.dzeko14.notesapp.task.DeleteNoteTask
@@ -39,5 +40,13 @@ class NoteDetailsViewModel(
         if(note.value?.id == -1L) return
 
         DeleteNoteTask(mNoteDao).execute(note.value)
+    }
+
+    fun shareNote(noteText: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Sharing note")
+        intent.putExtra(Intent.EXTRA_TEXT, noteText)
+
     }
 }

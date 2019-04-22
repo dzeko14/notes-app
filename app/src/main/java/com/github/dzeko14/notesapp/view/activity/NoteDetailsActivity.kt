@@ -2,6 +2,7 @@ package com.github.dzeko14.notesapp.view.activity
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -48,9 +49,19 @@ class NoteDetailsActivity : AppCompatActivity() {
                     mViewModel.onNoteDelete()
                     finish()
                 }
+
+                R.id.share -> { shareNote(mNoteEditText.text.toString()) }
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun shareNote(noteText: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Sharing note")
+        intent.putExtra(Intent.EXTRA_TEXT, noteText)
+        startActivity(intent)
     }
 
     override fun onBackPressed() {
