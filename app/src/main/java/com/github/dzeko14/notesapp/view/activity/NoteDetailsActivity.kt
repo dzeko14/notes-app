@@ -4,6 +4,8 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.EditText
 import com.github.dzeko14.notesapp.R
 import com.github.dzeko14.notesapp.viewmodel.NoteDetailsViewModel
@@ -32,6 +34,25 @@ class NoteDetailsActivity : AppCompatActivity() {
         mViewModel.note.observe(this, Observer {
             mNoteEditText.setText(it?.text ?: "")
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.note_details_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        item?.let {
+            when(it.itemId) {
+                R.id.delete -> {
+                    mViewModel.onNoteDelete()
+                    finish()
+                }
+            }
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
