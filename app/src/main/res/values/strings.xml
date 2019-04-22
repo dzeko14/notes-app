@@ -6,4 +6,6 @@
     <string name="descending">От новых к старым</string>
     <string name="search">Поиск</string>
     <string name="share">Поделиться</string>
+    <string name="enter_note_hint">Напишите свою заметку тут</string>
+    <string name="empty_list">Список заметок пуст. \n Чтобы создать заммметку нажмите +</string>
 </resources>

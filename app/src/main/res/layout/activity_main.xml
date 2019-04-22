@@ -7,6 +7,14 @@
         android:layout_height="match_parent"
         tools:context=".view.activity.MainActivity">
 
+    <TextView
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/empty_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/empty_list_text" android:textSize="24sp"
+            android:fontFamily="sans-serif-medium"/>
+
     <android.support.design.widget.FloatingActionButton android:layout_width="wrap_content"
                                                         android:layout_height="wrap_content"
                                                         android:id="@+id/FAB"
@@ -16,7 +24,7 @@
 
     <android.support.v7.widget.RecyclerView android:id="@+id/recycler_view"
                                             android:layout_width="match_parent"
-                                            android:layout_height="match_parent"/>
+                                            android:layout_height="match_parent" android:visibility="visible"/>
 
 
 

@@ -9,10 +9,12 @@
 
 
     <EditText
+            android:padding="8dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:inputType="textMultiLine"
+            android:hint="@string/enter_note_hint"
             android:ems="10"
             android:gravity="start|top"
-            android:id="@+id/editText" tools:text="Name"/>
+            android:id="@+id/editText" tools:text="Name" android:background="@null"/>
 </FrameLayout>

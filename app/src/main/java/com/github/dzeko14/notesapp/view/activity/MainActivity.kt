@@ -10,7 +10,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.SearchView
+import android.widget.TextView
 import com.github.dzeko14.notesapp.R
 import com.github.dzeko14.notesapp.view.adapter.NotesListAdapter
 import com.github.dzeko14.notesapp.viewmodel.ASCENDING
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mFAB: FloatingActionButton
     private lateinit var mSearchView: SearchView
+    private lateinit var mEmptyListTextView: TextView
 
     private val mAdapter: NotesListAdapter = NotesListAdapter(::onNotesListItemClicked)
     private lateinit var mMainViewModel: MainViewModel
@@ -56,8 +59,14 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         item?.let {
             when(item.itemId) {
-                R.id.asc -> mMainViewModel.getSortedNotesListBy(ASCENDING)
-                R.id.desc -> mMainViewModel.getSortedNotesListBy(DESCENDING)
+                R.id.asc -> {
+                    mMainViewModel.notes.removeObservers(this)
+                    mMainViewModel.getSortedNotesListBy(ASCENDING)
+                }
+                R.id.desc -> {
+                    mMainViewModel.notes.removeObservers(this)
+                    mMainViewModel.getSortedNotesListBy(DESCENDING)
+                }
             }
         }
         return super.onOptionsItemSelected(item)
@@ -70,8 +79,9 @@ class MainActivity : AppCompatActivity() {
         mMainViewModel = ViewModelProviders.of(this, MainViewModelFactory())
             .get(MainViewModel::class.java)
 
-        setupRecyclerView()
+        mEmptyListTextView = findViewById(R.id.empty_list_text)
 
+        setupRecyclerView()
 
         setupFAB()
         observeNotesUpdate()
@@ -84,6 +94,9 @@ class MainActivity : AppCompatActivity() {
                 notes?.let {
                     mAdapter.submitList(notes)
                 }
+                val notesListSize = notes?.size ?: 0
+                mEmptyListTextView.visibility = if (notesListSize == 0) View.VISIBLE
+                else View.GONE
             })
         })
     }
