@@ -26,4 +26,7 @@ interface NoteDao {
 
     @Query("Select * From Note Order By date Desc")
     fun getAllOrderByDateDesc(): DataSource.Factory<Int, Note>
+
+    @Query("Select * From Note Where text Like :t Order By date Desc")
+    fun findAllBy(t: String): DataSource.Factory<Int, Note>
 }

@@ -23,7 +23,7 @@ class MainViewModel(
 
     fun requestNotes() {
         updateNotes(noteDao.getAll())
-        notesFlag.value = !((notesFlag.value) ?: false)
+        notifyNotesListChanged()
     }
 
     fun getSortedNotesListBy(order: Int) {
@@ -35,11 +35,19 @@ class MainViewModel(
 
         updateNotes(dataSource)
 
-        notesFlag.value = !((notesFlag.value) ?: false)
+        notifyNotesListChanged()
     }
+
+    private fun notifyNotesListChanged() { notesFlag.value = !((notesFlag.value) ?: false) }
+
 
     private fun updateNotes(dataSource: DataSource.Factory<Int, Note>) {
         notes = LivePagedListBuilder(dataSource, 20)
             .build()
+    }
+
+    fun searchNotes(text: String) {
+        updateNotes(noteDao.findAllBy("%$text%"))
+        notifyNotesListChanged()
     }
 }

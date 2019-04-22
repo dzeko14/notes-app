@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.SearchView
 import com.github.dzeko14.notesapp.R
 import com.github.dzeko14.notesapp.view.adapter.NotesListAdapter
 import com.github.dzeko14.notesapp.viewmodel.ASCENDING
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mFAB: FloatingActionButton
+    private lateinit var mSearchView: SearchView
 
     private val mAdapter: NotesListAdapter = NotesListAdapter(::onNotesListItemClicked)
     private lateinit var mMainViewModel: MainViewModel
@@ -31,9 +33,24 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.note_list_menu, menu)
+        mSearchView = menu.findItem(R.id.search).actionView as SearchView
+        setupSearchView()
         return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun setupSearchView() {
+        mSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(text: String): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(text: String): Boolean {
+                mMainViewModel.searchNotes(text)
+                return true
+            }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
