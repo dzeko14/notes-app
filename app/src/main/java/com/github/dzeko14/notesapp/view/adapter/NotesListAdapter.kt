@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.github.dzeko14.notesapp.model.Note
 
-class NotesListAdapter
+class NotesListAdapter(
+    private val callback: (Long) -> Unit
+)
     : PagedListAdapter<Note, NotesListAdapter.NotesViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
@@ -19,7 +21,8 @@ class NotesListAdapter
                 android.R.layout.simple_list_item_1,
                 parent,
                 false
-            )
+            ),
+            callback
         )
     }
 
@@ -38,17 +41,21 @@ class NotesListAdapter
         }
     }
 
-    class NotesViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    class NotesViewHolder(
+        v: View,
+        private val callback: (Long) -> Unit
+    ) : RecyclerView.ViewHolder(v) {
         private val textView: TextView = v.findViewById(android.R.id.text1)
 
         fun onBind(note: Note?){
             if (note == null) {
                 textView.text = ""
+                itemView.setOnClickListener {  }
             } else {
                val text = if (note.text.length > 100) { cutText(note.text) }
                 else { note.text }
-
                 textView.text = text
+                itemView.setOnClickListener { callback(note.id) }
             }
         }
 
