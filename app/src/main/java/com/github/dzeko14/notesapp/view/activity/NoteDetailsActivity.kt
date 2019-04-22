@@ -34,8 +34,24 @@ class NoteDetailsActivity : AppCompatActivity() {
         })
     }
 
+    override fun onBackPressed() {
+        saveNote()
+        super.onBackPressed()
+
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        saveNote()
+        return super.onSupportNavigateUp()
+    }
+
+    private fun saveNote() {
+        mViewModel.onNoteSave(mNoteEditText.text.toString())
+    }
+
     private fun getNote() {
         val id = intent.getLongExtra(NOTE_ID, -1)
         mViewModel.onNotesIdReceived(id)
     }
+
 }
