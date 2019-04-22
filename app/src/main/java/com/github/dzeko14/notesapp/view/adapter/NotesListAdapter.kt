@@ -7,7 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.github.dzeko14.notesapp.R
 import com.github.dzeko14.notesapp.model.Note
+import java.text.SimpleDateFormat
+import java.util.*
 
 class NotesListAdapter(
     private val callback: (Long) -> Unit
@@ -18,7 +21,7 @@ class NotesListAdapter(
         val layoutInflater = LayoutInflater.from(parent.context)
         return NotesViewHolder(
             layoutInflater.inflate(
-                android.R.layout.simple_list_item_1,
+                R.layout.notes_list_item,
                 parent,
                 false
             ),
@@ -45,16 +48,19 @@ class NotesListAdapter(
         v: View,
         private val callback: (Long) -> Unit
     ) : RecyclerView.ViewHolder(v) {
-        private val textView: TextView = v.findViewById(android.R.id.text1)
+        private val textView: TextView = v.findViewById(R.id.text)
+        private val dateTextView: TextView = v.findViewById(R.id.date)
 
         fun onBind(note: Note?){
             if (note == null) {
                 textView.text = ""
+                dateTextView.text = " "
                 itemView.setOnClickListener {  }
             } else {
                val text = if (note.text.length > 100) { cutText(note.text) }
                 else { note.text }
                 textView.text = text
+                dateTextView.text = note.date.getFormatDate()
                 itemView.setOnClickListener { callback(note.id) }
             }
         }
@@ -64,4 +70,9 @@ class NotesListAdapter(
         }
 
     }
+}
+
+fun Date.getFormatDate(): String {
+    val formatter = SimpleDateFormat("dd:MM:YYY HH:mm", Locale.getDefault())
+    return formatter.format(this)
 }

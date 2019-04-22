@@ -3,10 +3,14 @@ package com.github.dzeko14.notesapp.viewmodel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.arch.paging.DataSource
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
 import com.github.dzeko14.notesapp.database.AppDatabase
 import com.github.dzeko14.notesapp.model.Note
+
+const val ASCENDING = 1
+const val DESCENDING = 2
 
 class MainViewModel(
     db: AppDatabase
@@ -15,27 +19,27 @@ class MainViewModel(
 
     var notes: LiveData<PagedList<Note>> = MutableLiveData()
 
-//    init {
-//        getMockNotes()
-//    }
-
-//    private fun getMockNotes(){
-//        val list = listOf<Note>(
-//            Note(0, "wasegssegsrdvbj kskjsr vkjsrv srjhv srhvksrvh ksvhskuvh skrvh srkvuhsrkuv hsrkvuh srvuk hsrvkusrh kusrh kusrvh ksuv hksu vhs"),
-//            Note(0, "wasegssegsrdvbj kskjsr vkjsrv srjhv srhvksrvh ksvhskuvh skrvh srkvuhsrkuv hsrkvuh srvuk hsrvkusrh kusrh kusrvh ksuv hksu vhs"),
-//            Note(0, "wasegssegsrdvbj kskjsr vkjsrv srjhv srhvksrvh ksvhskuvh skrvh srkvuhsrkuv hsrkvuh srvuk hsrvkusrh kusrh kusrvh ksuv hksu vhs f ffh fh  fhh hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhfffhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
-//        )
-//
-//        val r = Runnable { list.map {
-//            noteDao.insert(it)
-//        } }
-//
-//        Thread(r).start()
-//    }
+    val notesFlag: MutableLiveData<Boolean> = MutableLiveData()
 
     fun requestNotes() {
-        notes = LivePagedListBuilder(noteDao.getAll(), 20)
-            .build()
+        updateNotes(noteDao.getAll())
+        notesFlag.value = !((notesFlag.value) ?: false)
+    }
 
+    fun getSortedNotesListBy(order: Int) {
+        val dataSource = if (order == ASCENDING) {
+            noteDao.getAllOrderByDateAsc()
+        } else {
+            noteDao.getAllOrderByDateDesc()
+        }
+
+        updateNotes(dataSource)
+
+        notesFlag.value = !((notesFlag.value) ?: false)
+    }
+
+    private fun updateNotes(dataSource: DataSource.Factory<Int, Note>) {
+        notes = LivePagedListBuilder(dataSource, 20)
+            .build()
     }
 }

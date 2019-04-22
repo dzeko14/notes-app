@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Notes App</string>
     <string name="delete">Удалить</string>
+    <string name="filter_date">Сортировать по дате</string>
+    <string name="ascending">От старіх к новым</string>
+    <string name="descending">От старых к новым</string>
 </resources>

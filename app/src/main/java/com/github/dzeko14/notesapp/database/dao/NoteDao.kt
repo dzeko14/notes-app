@@ -15,9 +15,15 @@ interface NoteDao {
     @Update
     fun update(note: Note)
 
-    @Query("Select * from Note")
+    @Query("Select * from Note Order By date Desc ")
     fun getAll(): DataSource.Factory<Int, Note>
 
     @Query("Select * From Note Where id = :id")
     fun getById(id: Long): Note
+
+    @Query("Select * From Note Order By date Asc")
+    fun getAllOrderByDateAsc(): DataSource.Factory<Int, Note>
+
+    @Query("Select * From Note Order By date Desc")
+    fun getAllOrderByDateDesc(): DataSource.Factory<Int, Note>
 }
